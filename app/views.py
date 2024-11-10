@@ -3,24 +3,28 @@ from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password, check_password
 import datetime
 
-from django.template.defaultfilters import title
-
 from app.models import *
 from app.forms import *
 
 # Create your views here.
 def login(request):
+    """
+        Данная функция является представлением для страницы авторизации.
+        Она обрабатывает GET и POST запросы.
+        GET - возвращает шаблон страницы авторизации.
+        POST - проверяет отправленные на авторизацию данные пользователя с базой данных.
+    """
     user_list = Users.objects.all()
     form = LoginForm()
 
     info = {}
-    title = 'Авторизация'
+    title_name = 'Авторизация'
     href = '#'
     title_command = 'Войдите в профиль!'
     context = {
         'form': form,
         'info': info,
-        'title': title,
+        'title': title_name,
         'href': href,
         'title_command': title_command,
     }
@@ -49,17 +53,23 @@ def login(request):
 
 
 def registration(request):
+    """
+        Данная функция является представлением для страницы регистрации.
+        Она обрабатывает GET и POST запросы.
+        GET - возвращает шаблон страницы регистрации.
+        POST - проверяет отправленные на регистрацию данные пользователя на корректность.
+    """
     user_list = Users.objects.all()
     form = RegistrationForm()
 
     info = {}
-    title = 'Регистрация'
+    title_name = 'Регистрация'
     href = '/'
     title_command = 'Заполните форму!'
     context = {
         'form': form,
         'info': info,
-        'title': title,
+        'title': title_name,
         'href': href,
         'title_command': title_command,
     }
@@ -94,18 +104,24 @@ def registration(request):
 
 
 def create_post(request):
+    """
+        Данная функция является представлением для страницы создания постов.
+        Она обрабатывает GET и POST запросы.
+        GET - возвращает шаблон страницы создания постов.
+        POST - использует отправленные данные для создания постов.
+    """
     user = request.session.get('user')
     user = Users.objects.get(username=user)
     form = CreatePost()
 
     info = {}
-    title = 'Создание поста'
+    title_name = 'Создание поста'
     href = '/main_page/your_profile/'
     title_command = 'Заполните форму!'
     context = {
         'form': form,
         'info': info,
-        'title': title,
+        'title': title_name,
         'href': href,
         'title_command': title_command,
     }
@@ -115,9 +131,9 @@ def create_post(request):
         form = CreatePost(request.POST)
         if form.is_valid():
             # Получение данных формы
-            title = form.cleaned_data['title']
+            title_name = form.cleaned_data['title']
             description = form.cleaned_data['description']
-            Posts.objects.create(title=title,
+            Posts.objects.create(title=title_name,
                                  description=description,
                                  date_of_creation=datetime.date.today(),
                                  user=user)
@@ -127,17 +143,22 @@ def create_post(request):
 
 
 def main_page(request):
+    """
+        Данная функция является представлением для главной страницы с постами.
+        Она обрабатывает GET запрос.
+        GET - возвращает шаблон главной страницы.
+    """
     user = request.session.get('user')
     post_list = []
     for i in Posts.objects.all():
         post_list.append(i)
     post_list.reverse()
 
-    title = 'Главная страница'
+    title_name = 'Главная страница'
     href_main = '#'
     href_prof = 'your_profile/'
     context = {
-        'title': title,
+        'title': title_name,
         'user': user,
         'href_main': href_main,
         'href_prof': href_prof,
@@ -147,6 +168,12 @@ def main_page(request):
 
 
 def your_profile(request):
+    """
+        Данная функция является представлением для страницы профиля.
+        Она обрабатывает GET и POST запросы.
+        GET - возвращает шаблон страницы профиля.
+        POST - используется для удаления постов (получает id поста из POST запроса).
+    """
     user = request.session.get('user')
     user_id = Users.objects.get(username=user).id
     post_list = []
@@ -154,11 +181,11 @@ def your_profile(request):
         post_list.append(i)
     post_list.reverse()
 
-    title = 'Ваш профиль'
+    title_name = 'Ваш профиль'
     href_main = '/main_page'
     href_prof = '#'
     context = {
-        'title': title,
+        'title': title_name,
         'user': user,
         'href_main': href_main,
         'href_prof': href_prof,
