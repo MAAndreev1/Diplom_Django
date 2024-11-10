@@ -6,6 +6,8 @@
 * Django==5.1.2
 * sqlparse==0.5.1
 * tzdata==2024.2
+  
+![requirements](https://github.com/user-attachments/assets/f7c24ad3-92e2-4e13-b9bf-635935f616d9)
 
 ## Возможности:
 
